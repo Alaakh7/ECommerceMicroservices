@@ -1,0 +1,47 @@
+services:
+  cartdb:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${CART_DB_NAME:-cartdb}
+      POSTGRES_USER: ${CART_DB_USER:-cartuser}
+      POSTGRES_PASSWORD: ${CART_DB_PASSWORD:-change_this_password}
+    volumes:
+      - cartdb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${CART_DB_USER:-cartuser} -d ${CART_DB_NAME:-cartdb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+  cartservice:
+    build:
+      context: ./CartService
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__CartDatabase: Host=cartdb;Port=5432;Database=${CART_DB_NAME:-cartdb};Username=${CART_DB_USER:-cartuser};Password=${CART_DB_PASSWORD:-change_this_password}
+      Database__ApplyMigrationsOnStartup: "true"
+      CartExpiration__Enabled: "true"
+      Services__ProductService__BaseUrl: http://productservice:8080
+      Services__CustomerService__BaseUrl: http://customerservice:8080
+    ports:
+      - "5003:8080"
+    depends_on:
+      cartdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+volumes:
+  cartdb-data:
+
+networks:
+  ecommerce-network:
+    name: ecommerce-network

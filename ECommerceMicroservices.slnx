@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="CartService/CartService.csproj" Id="7cebd7b5-9477-4d6c-ae47-851634f1da02" />
   <Project Path="CustomerService/CustomerService.csproj" Id="2c60feda-2494-45c0-89b3-7b2d915c113b" />
+  <Project Path="OrderService/OrderService.csproj" Id="3fd4c401-63ed-417d-9a42-4b2fcf577f91" />
   <Project Path="ProductService/ProductService.csproj" />
 </Solution>

@@ -1,0 +1,52 @@
+services:
+  orderdb:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${ORDER_DB_NAME:-orderdb}
+      POSTGRES_USER: ${ORDER_DB_USER:-orderuser}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD:-change_this_password}
+    ports:
+      - "${ORDER_DB_PORT:-5435}:5432"
+    volumes:
+      - orderdb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+  orderservice:
+    container_name: orderservice
+    build:
+      context: ./OrderService
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__OrderDatabase: Host=orderdb;Port=5432;Database=${ORDER_DB_NAME:-orderdb};Username=${ORDER_DB_USER:-orderuser};Password=${ORDER_DB_PASSWORD:-change_this_password}
+      Database__ApplyMigrationsOnStartup: "true"
+      Services__ProductService__BaseUrl: http://productservice:8080
+      Services__CustomerService__BaseUrl: http://customerservice:8080
+      Services__CartService__BaseUrl: http://cartservice:8080
+      OrderRecovery__Enabled: "true"
+    ports:
+      - "${ORDERSERVICE_PORT:-5004}:8080"
+    depends_on:
+      orderdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+volumes:
+  orderdb-data:
+
+networks:
+  ecommerce-network:
+    name: ecommerce-network

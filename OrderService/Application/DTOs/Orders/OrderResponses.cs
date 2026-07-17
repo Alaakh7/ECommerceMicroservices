@@ -1,0 +1,12 @@
+using OrderService.Domain.Enums;
+
+namespace OrderService.Application.DTOs.Orders;
+
+public sealed record OrderResponse(Guid Id, string OrderNumber, Guid CustomerId, Guid CartId, string Currency, OrderStatus Status, decimal TotalAmount, int TotalQuantity, int DistinctItemCount, DateTimeOffset CreatedAtUtc, DateTimeOffset? UpdatedAtUtc, Guid ConcurrencyToken);
+public sealed record CreateOrderResponse(Guid Id, string OrderNumber, OrderStatus Status, bool RetryScheduled, Guid ConcurrencyToken);
+public sealed record OrderSummaryResponse(Guid Id, string OrderNumber, Guid CustomerId, Guid CartId, string Currency, OrderStatus Status, decimal TotalAmount, int TotalQuantity, int DistinctItemCount, DateTimeOffset CreatedAtUtc, DateTimeOffset? UpdatedAtUtc, DateTimeOffset? ConfirmedAtUtc, Guid ConcurrencyToken);
+public sealed record OrderItemResponse(Guid Id, Guid ProductId, string Sku, string ProductName, string? ImageUrl, decimal UnitPrice, int Quantity, decimal LineTotal, OrderItemInventoryStatus InventoryStatus, DateTimeOffset? StockDecreasedAtUtc, DateTimeOffset? StockRestoredAtUtc);
+public sealed record OrderAddressResponse(Guid Id, OrderAddressType AddressType, Guid? SourceAddressId, string RecipientName, string AddressLine1, string? AddressLine2, string City, string? StateOrProvince, string? PostalCode, string CountryCode, string? PhoneNumber);
+public sealed record OrderStatusHistoryResponse(OrderStatus? PreviousStatus, OrderStatus NewStatus, string? Reason, string ChangedBy, DateTimeOffset CreatedAtUtc, string? CorrelationId);
+public sealed record OrderDetailsResponse(Guid Id, string OrderNumber, Guid CustomerId, Guid CartId, string Currency, OrderStatus Status, decimal Subtotal, decimal DiscountAmount, decimal TaxAmount, decimal ShippingAmount, decimal TotalAmount, int TotalQuantity, int DistinctItemCount, string? FailureCode, string? FailureMessage, int RetryCount, DateTimeOffset? NextRetryAtUtc, DateTimeOffset? ConfirmedAtUtc, DateTimeOffset? CancelledAtUtc, DateTimeOffset? CompletedAtUtc, DateTimeOffset? FailedAtUtc, DateTimeOffset CreatedAtUtc, DateTimeOffset? UpdatedAtUtc, Guid ConcurrencyToken, IReadOnlyList<OrderItemResponse> Items, IReadOnlyList<OrderAddressResponse> Addresses, IReadOnlyList<OrderStatusHistoryResponse> StatusHistory);
+public sealed record OrderStatusResponse(Guid OrderId, string OrderNumber, OrderStatus Status, string? FailureCode, int RetryCount, DateTimeOffset? NextRetryAtUtc, DateTimeOffset? UpdatedAtUtc, Guid ConcurrencyToken);

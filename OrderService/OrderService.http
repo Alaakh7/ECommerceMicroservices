@@ -1,0 +1,24 @@
+@host = http://localhost:5004
+@orderId = 00000000-0000-0000-0000-000000000000
+
+GET {{host}}/health/live
+
+###
+GET {{host}}/api/v1/orders?pageNumber=1&pageSize=20&sortBy=createdAt&sortDirection=desc
+
+###
+POST {{host}}/api/v1/orders
+Content-Type: application/json
+X-Correlation-ID: order-example-001
+
+{
+  "cartId": "00000000-0000-0000-0000-000000000000",
+  "operationId": "create-order-example-001",
+  "acceptPriceChanges": false,
+  "shippingAddressId": null,
+  "billingAddressId": null,
+  "useShippingAddressForBilling": false
+}
+
+###
+GET {{host}}/api/v1/orders/{{orderId}}

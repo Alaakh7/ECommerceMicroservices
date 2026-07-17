@@ -1,0 +1,292 @@
+{
+  "ReverseProxy": {
+    "Routes": {
+      "products-route": {
+        "ClusterId": "product-cluster", "Order": 100,
+        "Match": { "Path": "/api/products", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathSet": "/api/v1/products" } ]
+      },
+      "products-create-route": {
+        "ClusterId": "product-cluster", "Order": 100,
+        "Match": { "Path": "/api/products", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathSet": "/api/v1/products" } ]
+      },
+      "products-read-route": {
+        "ClusterId": "product-cluster", "Order": 20,
+        "Match": { "Path": "/api/products/{id:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/products/{id}" } ]
+      },
+      "products-write-route": {
+        "ClusterId": "product-cluster", "Order": 20,
+        "Match": { "Path": "/api/products/{id:guid}", "Methods": [ "PUT", "DELETE" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/products/{id}" } ]
+      },
+      "products-status-route": {
+        "ClusterId": "product-cluster", "Order": 10,
+        "Match": { "Path": "/api/products/{id:guid}/status", "Methods": [ "PATCH" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/products/{id}/status" } ]
+      },
+      "products-by-sku-route": {
+        "ClusterId": "product-cluster", "Order": 10,
+        "Match": { "Path": "/api/products/by-sku/{sku}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/products/by-sku/{sku}" } ]
+      },
+      "products-availability-route": {
+        "ClusterId": "product-cluster", "Order": 10,
+        "Match": { "Path": "/api/products/{id:guid}/availability", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/products/{id}/availability" } ]
+      },
+      "products-availability-batch-route": {
+        "ClusterId": "product-cluster", "Order": 5,
+        "Match": { "Path": "/api/products/availability/batch", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathSet": "/api/v1/products/availability/batch" } ]
+      },
+      "products-transactions-route": {
+        "ClusterId": "product-cluster", "Order": 10,
+        "Match": { "Path": "/api/products/{id:guid}/stock/transactions", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/products/{id}/stock/transactions" } ]
+      },
+      "categories-route": {
+        "ClusterId": "product-cluster", "Order": 100,
+        "Match": { "Path": "/api/categories", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathSet": "/api/v1/categories" } ]
+      },
+      "categories-create-route": {
+        "ClusterId": "product-cluster", "Order": 100,
+        "Match": { "Path": "/api/categories", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathSet": "/api/v1/categories" } ]
+      },
+      "categories-read-route": {
+        "ClusterId": "product-cluster", "Order": 20,
+        "Match": { "Path": "/api/categories/{id:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/categories/{id}" } ]
+      },
+      "categories-write-route": {
+        "ClusterId": "product-cluster", "Order": 20,
+        "Match": { "Path": "/api/categories/{id:guid}", "Methods": [ "PUT", "DELETE" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/categories/{id}" } ]
+      },
+      "categories-status-route": {
+        "ClusterId": "product-cluster", "Order": 10,
+        "Match": { "Path": "/api/categories/{id:guid}/status", "Methods": [ "PATCH" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/categories/{id}/status" } ]
+      },
+      "categories-by-slug-route": {
+        "ClusterId": "product-cluster", "Order": 10,
+        "Match": { "Path": "/api/categories/by-slug/{slug}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/categories/by-slug/{slug}" } ]
+      },
+      "customers-route": {
+        "ClusterId": "customer-cluster", "Order": 100,
+        "Match": { "Path": "/api/customers", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathSet": "/api/v1/customers" } ]
+      },
+      "customers-create-route": {
+        "ClusterId": "customer-cluster", "Order": 100,
+        "Match": { "Path": "/api/customers", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathSet": "/api/v1/customers" } ]
+      },
+      "customers-read-route": {
+        "ClusterId": "customer-cluster", "Order": 20,
+        "Match": { "Path": "/api/customers/{id:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/{id}" } ]
+      },
+      "customers-write-route": {
+        "ClusterId": "customer-cluster", "Order": 20,
+        "Match": { "Path": "/api/customers/{id:guid}", "Methods": [ "PUT", "DELETE" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/{id}" } ]
+      },
+      "customers-status-route": {
+        "ClusterId": "customer-cluster", "Order": 10,
+        "Match": { "Path": "/api/customers/{id:guid}/status", "Methods": [ "PATCH" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/{id}/status" } ]
+      },
+      "customers-by-number-route": {
+        "ClusterId": "customer-cluster", "Order": 10,
+        "Match": { "Path": "/api/customers/by-number/{number}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/by-number/{number}" } ]
+      },
+      "customers-by-email-route": {
+        "ClusterId": "customer-cluster", "Order": 10,
+        "Match": { "Path": "/api/customers/by-email", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathSet": "/api/v1/customers/by-email" } ]
+      },
+      "customers-eligibility-route": {
+        "ClusterId": "customer-cluster", "Order": 10,
+        "Match": { "Path": "/api/customers/{id:guid}/eligibility", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/{id}/eligibility" } ]
+      },
+      "customers-eligibility-batch-route": {
+        "ClusterId": "customer-cluster", "Order": 5,
+        "Match": { "Path": "/api/customers/eligibility/batch", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathSet": "/api/v1/customers/eligibility/batch" } ]
+      },
+      "customer-addresses-route": {
+        "ClusterId": "customer-cluster", "Order": 10,
+        "Match": { "Path": "/api/customers/{customerId:guid}/addresses/{**remainder}", "Methods": [ "GET", "POST", "PUT", "PATCH", "DELETE" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/{customerId}/addresses/{**remainder}" } ]
+      },
+      "customer-addresses-root-route": {
+        "ClusterId": "customer-cluster", "Order": 9,
+        "Match": { "Path": "/api/customers/{customerId:guid}/addresses", "Methods": [ "GET", "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/customers/{customerId}/addresses" } ]
+      },
+      "carts-route": {
+        "ClusterId": "cart-cluster", "Order": 100,
+        "Match": { "Path": "/api/carts", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathSet": "/api/v1/carts" } ]
+      },
+      "carts-read-route": {
+        "ClusterId": "cart-cluster", "Order": 20,
+        "Match": { "Path": "/api/carts/{cartId:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}" } ]
+      },
+      "carts-customer-route": {
+        "ClusterId": "cart-cluster", "Order": 10,
+        "Match": { "Path": "/api/carts/customer/{customerId:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/customer/{customerId}" } ]
+      },
+      "carts-customer-active-route": {
+        "ClusterId": "cart-cluster", "Order": 5,
+        "Match": { "Path": "/api/carts/customer/{customerId:guid}/active", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/customer/{customerId}/active" } ]
+      },
+      "carts-items-create-route": {
+        "ClusterId": "cart-cluster", "Order": 10,
+        "Match": { "Path": "/api/carts/{cartId:guid}/items", "Methods": [ "POST", "DELETE" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}/items" } ]
+      },
+      "carts-items-route": {
+        "ClusterId": "cart-cluster", "Order": 5,
+        "Match": { "Path": "/api/carts/{cartId:guid}/items/{productId:guid}", "Methods": [ "PUT", "DELETE" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}/items/{productId}" } ]
+      },
+      "carts-refresh-route": {
+        "ClusterId": "cart-cluster", "Order": 10,
+        "Match": { "Path": "/api/carts/{cartId:guid}/refresh", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}/refresh" } ]
+      },
+      "carts-validate-route": {
+        "ClusterId": "cart-cluster", "Order": 10,
+        "Match": { "Path": "/api/carts/{cartId:guid}/validate", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}/validate" } ]
+      },
+      "carts-checkout-prepare-route": {
+        "ClusterId": "cart-cluster", "Order": 5,
+        "Match": { "Path": "/api/carts/{cartId:guid}/checkout/prepare", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "critical", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}/checkout/prepare" } ]
+      },
+      "carts-abandon-route": {
+        "ClusterId": "cart-cluster", "Order": 10,
+        "Match": { "Path": "/api/carts/{cartId:guid}/abandon", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/carts/{cartId}/abandon" } ]
+      },
+      "orders-route": {
+        "ClusterId": "order-cluster", "Order": 100,
+        "Match": { "Path": "/api/orders", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathSet": "/api/v1/orders" } ]
+      },
+      "orders-create-route": {
+        "ClusterId": "order-cluster", "Order": 100,
+        "Match": { "Path": "/api/orders", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "critical", "TimeoutPolicy": "order-creation",
+        "Transforms": [ { "PathSet": "/api/v1/orders" } ]
+      },
+      "orders-read-route": {
+        "ClusterId": "order-cluster", "Order": 20,
+        "Match": { "Path": "/api/orders/{orderId:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/orders/{orderId}" } ]
+      },
+      "orders-by-number-route": {
+        "ClusterId": "order-cluster", "Order": 10,
+        "Match": { "Path": "/api/orders/by-number/{orderNumber}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/orders/by-number/{orderNumber}" } ]
+      },
+      "orders-customer-route": {
+        "ClusterId": "order-cluster", "Order": 10,
+        "Match": { "Path": "/api/orders/customer/{customerId:guid}", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/orders/customer/{customerId}" } ]
+      },
+      "orders-status-route": {
+        "ClusterId": "order-cluster", "Order": 10,
+        "Match": { "Path": "/api/orders/{orderId:guid}/status", "Methods": [ "GET" ] },
+        "RateLimiterPolicy": "read", "TimeoutPolicy": "read",
+        "Transforms": [ { "PathPattern": "/api/v1/orders/{orderId}/status" } ]
+      },
+      "orders-cancel-route": {
+        "ClusterId": "order-cluster", "Order": 10,
+        "Match": { "Path": "/api/orders/{orderId:guid}/cancel", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/orders/{orderId}/cancel" } ]
+      },
+      "orders-complete-route": {
+        "ClusterId": "order-cluster", "Order": 10,
+        "Match": { "Path": "/api/orders/{orderId:guid}/complete", "Methods": [ "POST" ] },
+        "RateLimiterPolicy": "write", "TimeoutPolicy": "write",
+        "Transforms": [ { "PathPattern": "/api/v1/orders/{orderId}/complete" } ]
+      }
+    },
+    "Clusters": {
+      "product-cluster": {
+        "LoadBalancingPolicy": "PowerOfTwoChoices",
+        "HealthCheck": { "Active": { "Enabled": true, "Interval": "00:00:30", "Timeout": "00:00:03", "Policy": "ConsecutiveFailures", "Path": "/health/ready" }, "Passive": { "Enabled": true, "Policy": "TransportFailureRate", "ReactivationPeriod": "00:00:30" } },
+        "Destinations": { "product-destination": { "Address": "http://localhost:5032/" } }
+      },
+      "customer-cluster": {
+        "LoadBalancingPolicy": "PowerOfTwoChoices",
+        "HealthCheck": { "Active": { "Enabled": true, "Interval": "00:00:30", "Timeout": "00:00:03", "Policy": "ConsecutiveFailures", "Path": "/health/ready" }, "Passive": { "Enabled": true, "Policy": "TransportFailureRate", "ReactivationPeriod": "00:00:30" } },
+        "Destinations": { "customer-destination": { "Address": "http://localhost:5094/" } }
+      },
+      "cart-cluster": {
+        "LoadBalancingPolicy": "PowerOfTwoChoices",
+        "HealthCheck": { "Active": { "Enabled": true, "Interval": "00:00:30", "Timeout": "00:00:03", "Policy": "ConsecutiveFailures", "Path": "/health/ready" }, "Passive": { "Enabled": true, "Policy": "TransportFailureRate", "ReactivationPeriod": "00:00:30" } },
+        "Destinations": { "cart-destination": { "Address": "http://localhost:5260/" } }
+      },
+      "order-cluster": {
+        "LoadBalancingPolicy": "PowerOfTwoChoices",
+        "HealthCheck": { "Active": { "Enabled": true, "Interval": "00:00:30", "Timeout": "00:00:03", "Policy": "ConsecutiveFailures", "Path": "/health/ready" }, "Passive": { "Enabled": true, "Policy": "TransportFailureRate", "ReactivationPeriod": "00:00:30" } },
+        "Destinations": { "order-destination": { "Address": "http://localhost:5004/" } }
+      }
+    }
+  }
+}

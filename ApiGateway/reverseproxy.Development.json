@@ -1,0 +1,10 @@
+{
+  "ReverseProxy": {
+    "Routes": {
+      "products-docs-route": { "ClusterId": "product-cluster", "Order": 0, "Match": { "Path": "/docs/products/openapi.json", "Methods": [ "GET" ] }, "Transforms": [ { "PathSet": "/swagger/v1/swagger.json" } ] },
+      "customers-docs-route": { "ClusterId": "customer-cluster", "Order": 0, "Match": { "Path": "/docs/customers/openapi.json", "Methods": [ "GET" ] }, "Transforms": [ { "PathSet": "/swagger/v1/swagger.json" } ] },
+      "carts-docs-route": { "ClusterId": "cart-cluster", "Order": 0, "Match": { "Path": "/docs/carts/openapi.json", "Methods": [ "GET" ] }, "Transforms": [ { "PathSet": "/swagger/v1/swagger.json" } ] },
+      "orders-docs-route": { "ClusterId": "order-cluster", "Order": 0, "Match": { "Path": "/docs/orders/openapi.json", "Methods": [ "GET" ] }, "Transforms": [ { "PathSet": "/swagger/v1/swagger.json" } ] }
+    }
+  }
+}

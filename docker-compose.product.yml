@@ -1,0 +1,49 @@
+services:
+  productdb:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: ${POSTGRES_USER:-productuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - productdb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d productdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+  productservice:
+    container_name: productservice
+    build:
+      context: ./ProductService
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__ProductDatabase: Host=productdb;Port=5432;Database=productdb;Username=${POSTGRES_USER:-productuser};Password=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+      Database__ApplyMigrationsOnStartup: "true"
+      Database__SeedData: "true"
+    ports:
+      - "${PRODUCTSERVICE_PORT:-5001}:8080"
+    depends_on:
+      productdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+volumes:
+  productdb-data:
+
+networks:
+  ecommerce-network:
+    name: ecommerce-network

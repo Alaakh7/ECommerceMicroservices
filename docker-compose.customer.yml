@@ -1,0 +1,49 @@
+services:
+  customerdb:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${CUSTOMER_DB_NAME:-customerdb}
+      POSTGRES_USER: ${CUSTOMER_DB_USER:-customeruser}
+      POSTGRES_PASSWORD: ${CUSTOMER_DB_PASSWORD:?CUSTOMER_DB_PASSWORD must be set}
+    ports:
+      - "${CUSTOMER_DB_PORT:-5433}:5432"
+    volumes:
+      - customerdb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+  customerservice:
+    container_name: customerservice
+    build:
+      context: ./CustomerService
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__CustomerDatabase: Host=customerdb;Port=5432;Database=${CUSTOMER_DB_NAME:-customerdb};Username=${CUSTOMER_DB_USER:-customeruser};Password=${CUSTOMER_DB_PASSWORD:?CUSTOMER_DB_PASSWORD must be set}
+      Database__ApplyMigrationsOnStartup: "true"
+      Database__SeedData: "true"
+    ports:
+      - "${CUSTOMERSERVICE_PORT:-5002}:8080"
+    depends_on:
+      customerdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ecommerce-network
+
+volumes:
+  customerdb-data:
+
+networks:
+  ecommerce-network:
+    name: ecommerce-network

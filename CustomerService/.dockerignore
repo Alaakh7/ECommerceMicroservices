@@ -1,0 +1,9 @@
+bin
+obj
+.git
+.vs
+.idea
+TestResults
+.env
+*.user
+*.suo
